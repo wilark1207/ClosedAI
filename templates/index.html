@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <title>Flask Chat App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Add any additional styles or scripts here -->
+</head>
+<body>
+    <div class="mainContainer">
+    <div class="chatContainer">
+        <div class="chatHeader">
+            <h2 class="title">How can I help?</h2>
+        </div>
+    <div id="main-chat-screen">
+        <!-- Your chat UI goes here -->
+        <div id="chat-messages">
+            <!-- Display chat messages here -->
+            
+        </div>
+        <div class="chatDiv" id="chat-input">
+            <input type="text" id="message-input" placeholder="Type your message...">
+        <button class="sendButton" onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+        </div>
+        <div class="suggestionsDiv">
+            <a class="suggestion">Am I free next friday?</a>
+            <a class="suggestion">How many hours you have I spent studying this week?</a>
+            <a class="suggestion">What do I have on today?</a>
+        </div>
+        <h4>Developed by ClosedAI for UNIHACK 2024. Powered by AI</h4>
+    </div>
+</div>
+<div class="display">
+    <div class="displayHeader">
+        <h2 class="displayHeaderTitle">March, 2024</h2>
+        <h3 class="description">Synced to Google Calendar</h3>
+    </div>
+</div>
+</div>
+
+    <!-- Add any additional scripts here -->
+    <script>
+        function sendMessage() {
+            // Implement logic to send the message to the server
+            // and update the chat messages on the client side
+        }
+    </script>
+</body>
+</html>
