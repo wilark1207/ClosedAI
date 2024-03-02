@@ -121,7 +121,7 @@ def get_date_from_prompt(prompt):
                 {
                     "role": "user",
                     "content": prompt
-                    + "Here I am referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. Return your answer in the format yyyy-mm-dd. Do not say anything else.",
+                    + "Here I am referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. If the date is only one say that date is X, then return the dates X -1 and X + 1 in one line separated by space. Otherwise Return your answer in the format yyyy-mm-dd yyyy-mm-dd. Do not say anything else.",
                 }
             ],
         )
