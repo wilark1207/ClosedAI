@@ -1,5 +1,4 @@
 import os.path
-import requests
 import datetime as dt
 import datetime
 
@@ -49,8 +48,6 @@ def get_calendar_service():
 #
 def fetch_events(service, dates):
 
-    print(dates)
-
     tz = pytz.timezone("Australia/Sydney")
 
     date_parts = dates.split()
@@ -75,23 +72,27 @@ def fetch_events(service, dates):
         )
         .execute()
     )
-    print(events_result)
+
     events = events_result.get("items", [])
+    event_data = []
 
-    if not events:
-        print("No upcoming events found. ")
-    # for event in events:
-    #     start = event["start"].get("dateTime", event["start"].get("date"))
-    #     print(start, event["summary"])
-    else:
-        # events_data = json.loads(json.dumps(events, indent=2))
-        # for event in events_data:
-        #     print(event)
+    for event in events:
+        summary = event.get("summary", "No summary available")
+        start_time = event["start"].get(
+            "dateTime", event["start"].get("date", "No start time available")
+        )
+        end_time = event["end"].get(
+            "dateTime", event["end"].get("date", "No end time available")
+        )
+        location = event.get("location", "No location available")
+        description = event.get("description", "No description available")
+        event_info = {
+            "summary": summary,
+            "start_time": start_time,
+            "end_time": end_time,
+            "location": location,
+            "description": description,
+        }
+        event_data.append(event_info)
 
-        # print(json.dumps(events, indent=2))
-        return events_result
-
-
-service = get_calendar_service()
-print(fetch_events(service, "2023-04-01 2023-06-01"))
-
+    return event_data
