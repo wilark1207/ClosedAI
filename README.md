@@ -1,15 +1,15 @@
 # ClosedAI
-##Setup frontend:
+### Setup frontend: ###
 ```
 cd react/template
 npm i
 ```
-##Run frontend:
+### Run frontend: ###
 ```
 cd react/template
 npm run dev
 ```
-##Run backend:
+### Run Backend: ###
 ```
 pip install flask
 python -m flask --debug run
