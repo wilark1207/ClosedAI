@@ -1,0 +1,349 @@
+#root {
+  width: 100vw;
+    height: 100vh;
+    padding: 40px;
+}
+
+body{
+  width: 100%;
+  height: 100%;
+
+  background: #83a4d4;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #b6fbff, #83a4d4);  /* Chrome 10-25, Safari 5.1-6 */
+  background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+}
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+#input{
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  max-height: 100vh;
+  width: 100%;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+.chatHeader {
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  padding: 10px;
+  border-bottom: 1px solid #8ec5fc;
+  animation: fade-in-bottom 0.7s ease-in-out forwards;
+  margin-bottom: 20px;
+}
+
+.title{
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  color: #2E86C1;
+  font-weight: 200;
+  font-size: 2em;
+}
+
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  width: calc(66%);
+  background-color: white;
+  max-height: 100vh;
+  height: calc(100% - 80px);
+  border-radius: 25px;
+  animation: fade-in-bottom 0.5s ease-in-out forwards;
+}
+
+#main-chat-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+}
+
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  width: 70%;
+  max-height: 55%;
+  height: 55%;
+}
+
+.loader {
+  position: relative;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: linear-gradient(#f07e6e, #84cdfa, #5ad1cd);
+  animation: animate 1.2s linear infinite;
+}
+
+@keyframes animate {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+}
+
+#chat-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 70%;
+  height: 10%;
+}
+
+#message-input {
+  flex: 1;
+  margin-right: 10px;
+  height: 70%;
+  color: #2E86C1;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: 2px solid #8ec5fc;
+  border-radius: 25px;
+  font-weight: 100;
+  background-color: #d4e1ea;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#message-input::placeholder {
+  color: #96b2c6;
+  padding-left: 10px;
+  font-size: 1.2em;
+  font-weight: 100;
+}
+
+#message-input:focus {
+  color: #2E86C1;
+  font-weight: 100;
+  padding-left: 10px
+}
+
+#message-input:focus-visible {
+  color: #2E86C1;
+  font-weight: 100;
+  outline: none;
+}
+
+.sendButton {
+  background-image: linear-gradient(90deg, #d19fff 0%, #67b3ff 100%);
+  height: 70%;
+  border: none;
+  padding: 10px;
+  width: 6%;
+  border-radius: 25px;
+  color: white;
+  transition: transform 0.4s ease;
+}
+
+.sendButton:hover {
+  transform: scale(1.1);
+}
+
+.sendButton:active {
+  transform: scale(0.9);
+}
+
+.suggestionsDiv{
+  display: flex;
+  flex-direction: row;
+  width: 70%;
+  margin-bottom: 10px;
+  justify-content: space-evenly;
+}
+
+.suggestion{
+  border-radius: 25px;
+  padding: 10px;
+  background-color: #c7e0fa;
+  color: rgb(44, 110, 214);
+  font-weight: lighter;
+  font-size: 0.7em;
+  transition: background-color 0.3s ease;
+
+}
+
+.suggestion:hover {
+  background-color: #d8eafd;
+}
+
+h4{
+  margin-top: 0;
+  color: white;
+  font-size: small;
+  text-align: center;
+  font-weight: 400;
+}
+
+.display {
+  display: flex;
+  flex-direction: column;
+  width: calc(33%);
+  max-height: 100vh;
+  height: calc(100% - 80px);
+  border-radius: 25px;
+  border: 1px solid #c7e0fa;
+  background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+  animation: fade-in-bottom 0.9s ease-in-out forwards;
+}
+
+.displayHeader {
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  padding: 25px;
+}
+
+.displayHeaderTitle{
+  font-weight: bold;
+  color: #8451b4;
+  font-size: 2em;
+}
+
+.description{
+  font-weight: lighter;
+  color: #8451b4;
+  font-size:medium;
+}
+
+@keyframes fade-in-bottom {
+  0% {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  100%{
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.messageAI {
+  display: flex;
+  font-size: 16px;
+  background: #eef2f2;
+  color: #555;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 25px;
+  animation: fade-in-bottom 1s ease-in-out forwards;
+}
+
+.messageUser{
+  display: flex;
+  font-size: 16px;
+  color: #555;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 25px;
+  animation: fade-in-bottom 0.5s ease-in-out forwards;
+}
+
+h5{
+  font-weight: lighter;
+}
+
+.icon {
+  color: #d19fff;
+  margin: 10px; /* Adjust the spacing between the icon and text as needed */
+}
+
+.content {
+  flex-grow: 1;
+}
+
+.content h5 {
+  margin: 0; /* Remove any default margin for better alignment */
+}
+
+.message{
+  margin-top: 0;
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;
+}
+
+/* Container adjustments */
+.inputContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  height: 40px; /* Example height, adjust as needed */
+  align-items: center;
+  padding-right: 40px; /* Make space for the mic button */
+}
+
+/* Microphone button adjustments */
+.micButton {
+  position: absolute;
+  right: 10px; /* Adjust this value as needed to position the button */
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  width: max-content;
+  border-radius: 50%; /* Circular button */
+  border: none;
+  background-color: transparent; /* Example styling */
+  cursor: pointer; /* Cursor pointer on hover */
+  transition: all 0.5s;
+  outline: none !important;
+}
+
+.micButton:hover {
+  scale: 1.1; /* Example scaling on hover */
+}
+
+.micButton:active {
+  scale: 0.9; /* Example scaling on click */
+}
+
+.iconMic {
+  color: #333; /* Example color */
+  background-color: transparent;
+}

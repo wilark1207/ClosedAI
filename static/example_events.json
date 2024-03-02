@@ -1,0 +1,45 @@
+{
+    "items": [
+      {
+        "id": "event1abc",
+        "summary": "Team Meeting",
+        "description": "Monthly team meeting to discuss project progress and milestones.",
+        "location": "Conference Room 1",
+        "start": {
+          "dateTime": "2024-03-01T09:00:00-07:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "end": {
+          "dateTime": "2024-03-01T10:00:00-07:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "attendees": [
+          {"email": "member1@example.com", "responseStatus": "accepted"},
+          {"email": "member2@example.com", "responseStatus": "declined"},
+          {"email": "member3@example.com", "responseStatus": "needsAction"}
+        ],
+        "created": "2024-02-20T12:00:00.000Z",
+        "updated": "2024-02-25T14:00:00.000Z"
+      },
+      {
+        "id": "event2xyz",
+        "summary": "Client Presentation",
+        "description": "Presenting the new product features to the client.",
+        "location": "Client's Office",
+        "start": {
+          "dateTime": "2024-03-05T14:00:00-07:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "end": {
+          "dateTime": "2024-03-05T15:30:00-07:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "attendees": [
+          {"email": "client@example.com", "responseStatus": "accepted"},
+          {"email": "sales@example.com", "responseStatus": "accepted"}
+        ],
+        "created": "2024-02-22T08:30:00.000Z",
+        "updated": "2024-02-26T09:45:00.000Z"
+      }
+    ]
+  }
