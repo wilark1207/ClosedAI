@@ -46,12 +46,20 @@ def get_calendar_service():
 # today's date - variable
 #
 #
-def fetch_events(service, year, month, day, range):
+def fetch_events(service, dates):
 
     tz = pytz.timezone("Australia/Sydney")
 
-    timeMin = datetime(year, month, day, tzinfo=tz) - timedelta(days=range)
-    timeMax = datetime(year, month, day, tzinfo=tz) + timedelta(days=range)
+    date_parts = dates.split()
+
+    date1 = date_parts[0].split("-")
+    date1Year, date1Month, date1Day = map(int, date1)
+
+    date2 = date_parts[1].split("-")
+    date2Year, date2Month, date2Day = map(int, date2)
+
+    timeMin = datetime(date1Year, date1Month, date1Day, tzinfo=tz)
+    timeMax = datetime(date2Year, date2Month, date2Day, tzinfo=tz)
 
     events_result = (
         service.events()
@@ -78,3 +86,7 @@ def fetch_events(service, year, month, day, range):
 
         # print(json.dumps(events, indent=2))
         return events_result
+
+
+service = get_calendar_service()
+print(fetch_events(service, "2023-04-01 2023-06-01"))
