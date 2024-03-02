@@ -56,15 +56,6 @@ background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
     align-items: center;
 }
 
-#recordingBg {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-}
-
-
 #chat-messages {
     flex: 1;
     overflow-y: auto;
@@ -135,21 +126,6 @@ background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
     width: 6%;
     border-radius: 25px;
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-.micButton {
-    background-color: transparent;
-    border: none;
-    width: 6%;
-    border-radius: 25px;
-    color: linear-gradient(90deg, #d19fff 0%, #67b3ff 100%);
-    position: fixed;
-    right: 20%;
-    cursor: pointer;
 }
 
 .suggestionsDiv{

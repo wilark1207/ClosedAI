@@ -1,0 +1,30 @@
+.weekLoadContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .dayContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .displayHeaderTitle{
+    font-weight: bold;
+    color: #8451b4;
+    font-size: 2em;
+  }
+  
+  .dayBar {
+    width: 40px;
+    border: 2px solid #ccc; /* Border for the bar */
+    background-color: #4CAF50; /* Solid color for the bar */
+    background-image: linear-gradient(to top, #66bb6a, #4caf50); /* Gradient for the bar */
+    margin: 2px 0;
+    border-radius: 5px;
+  }
