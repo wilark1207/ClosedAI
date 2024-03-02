@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { faPaperPlane, faWandMagicSparkles, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faWandMagicSparkles, faUser, faMicrophone } from '@fortawesome/free-solid-svg-icons';
 
 const App = () => {
   const [data, setData] = useState([{}]);
