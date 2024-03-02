@@ -26,7 +26,7 @@ calendar = {
     }
   ],
   "events": [
-    {
+    { 
       "summary": "Event 1",
       "location": "Event 1 location",
       "description": "Description of Event 1",
