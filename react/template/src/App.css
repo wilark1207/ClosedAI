@@ -1,10 +1,17 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100vw;
+    height: 100vh;
+    padding: 40px;
 }
 
+body{
+  width: 100%;
+  height: 100%;
+
+  background: #83a4d4;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #b6fbff, #83a4d4);  /* Chrome 10-25, Safari 5.1-6 */
+  background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+}
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -50,9 +57,9 @@
   display: flex;
   flex-direction: row;
   max-height: 100vh;
+  width: 100%;
   justify-content: space-between;
   height: 100vh;
-  padding: 40px
 }
 
 .chatHeader {
@@ -61,10 +68,13 @@
   padding: 10px;
   border-bottom: 1px solid #8ec5fc;
   animation: fade-in-bottom 0.7s ease-in-out forwards;
+  margin-bottom: 20px;
 }
 
 .title{
   text-align: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
   color: #2E86C1;
   font-weight: 200;
   font-size: 2em;
@@ -126,9 +136,12 @@
   flex: 1;
   margin-right: 10px;
   height: 70%;
+  color: #2E86C1;
+  padding-left: 10px;
   border: 2px solid #8ec5fc;
   border-radius: 25px;
   font-weight: 100;
+  background-color: #d4e1ea;
 }
 
 #message-input::placeholder {
@@ -232,3 +245,38 @@ h4{
   }
 }
 
+.messageAI {
+  display: flex;
+  font-size: 16px;
+  background: #eef2f2;
+  color: #555;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 25px;
+}
+
+h5{
+  font-weight: lighter;
+}
+
+.icon {
+  color: #d19fff;
+  margin-right: 8px; /* Adjust the spacing between the icon and text as needed */
+}
+
+.content {
+  flex-grow: 1;
+}
+
+.content h5 {
+  margin: 0; /* Remove any default margin for better alignment */
+}
+
+.message{
+  margin-top: 0;
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;
+}
