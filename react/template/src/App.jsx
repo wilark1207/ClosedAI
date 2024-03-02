@@ -2,8 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { faMicrophone, faPaperPlane, faWandMagicSparkles, faUser } from '@fortawesome/free-solid-svg-icons';
-import MyCalendar from './Calendar';
+import { faPaperPlane, faWandMagicSparkles, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const App = () => {
   const [data, setData] = useState([{}]);
