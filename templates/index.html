@@ -27,7 +27,12 @@
 
         <div id="chat-messages">
             <!-- Display chat messages here -->
-            
+            <div style="display: flex;">
+
+            </div>
+            <div>
+                
+            </div>
         </div>
         <div class="chatDiv" id="chat-input">
             <input type="text" id="message-input" placeholder="Type your message...">
@@ -83,6 +88,22 @@
                     let transcript = event.results[0][0].transcript;
                     document.getElementById('message-input').value = transcript;
                     console.log("Transcription: " + transcript);
+                    /* Example post request with the text
+                    fetch('/receive_text', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ text: transcript }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    */
                 };
                 
                 recognition.onerror = function(event) {
@@ -94,7 +115,11 @@
                 console.log("Browser does not support Speech Recognition");
             }
         }
-
+        function textToSpeech(text) {
+            // Implement logic to convert text to speech
+            let message= new window.SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(message);
+        }
     </script>
 </body>
 </html>
