@@ -2,92 +2,49 @@ import datetime
 import json
 import os.path
 
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-# If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/calendar"]
+# service = get_calendar_service()
 
+# if get_prompt_type(prompt) == DESCRIPTIVE_PROMPT:
+#     event_list = fetch_events(service, get_date_from_prompt(prompt))
+#     return get_results(prompt, event_list) 
 
-def create_event(events_string):
-  
-  """Shows basic usage of the Google Calendar API.
-  Prints the start and name of the next 10 events on the user's calendar.
-  """
-  creds = None
-  # The file token.json stores the user's access and refresh tokens, and is
-  # created automatically when the authorization flow completes for the first
-  # time.
-  if os.path.exists("token.json"):
-    creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-  # If there are no (valid) credentials available, let the user log in.
-  if not creds or not creds.valid:
-    if creds and creds.expired and creds.refresh_token:
-      creds.refresh(Request())
-    else:
-      flow = InstalledAppFlow.from_client_secrets_file(
-          "credentials.json", SCOPES
-      )
-      creds = flow.run_local_server(port=0)
-    # Save the credentials for the next run
-    with open("token.json", "w") as token:
-      token.write(creds.to_json())
+# elif get_prompt_type(prompt) == MODIFICATION_PROMPT:
+#   return create_event(service, get_json_from_prompt(prompt))
 
+def create_event(service, events_string):
   try:
-    service = build("calendar", "v3", credentials=creds)
-
     events_list = json.loads(events_string)
 
     for event in events_list:
-        event = service.events().insert(calendarId='jacky248199911@gmail.com', body=event).execute()
+        event = service.events().insert(calendarId='primary', body=event).execute()
 
-
-
+    return 'The event(s) have been created successfully in your calendar'
 
   except HttpError as error:
     print(f"An error occurred: {error}")
+    return 'f"An error occurred. Events could not be created: {error}"'
+
+
 
 if __name__ == "__main__":
   string = '''
-    [
-        {
-            "summary": "Meeting with Client",
-            "start": {
-                "dateTime": "2024-03-03T09:00:00",
-                "timeZone": "Australia/Sydney"
-            },
-            "end": {
-                "dateTime": "2024-03-03T10:00:00",
-                "timeZone": "Australia/Sydney"
-            }
-        },
-        {
-            "summary": "Team Brainstorming Session",
-            "start": {
-                "dateTime": "2024-03-03T14:00:00",
-                "timeZone": "Australia/Sydney"
-            },
-            "end": {
-                "dateTime": "2024-03-03T15:30:00",
-                "timeZone": "Australia/Sydney"
-            }
-        },
-        {
-            "summary": "Project Deadline",
-            "start": {
-                "dateTime": "2024-03-03T17:00:00",
-                "timeZone": "Australia/Sydney"
-            },
-            "end": {
-                "dateTime": "2024-03-03T19:00:00",
-                "timeZone": "Australia/Sydney"
-            }
-        }
-    ]
+    [{
+    "summary": "Meeting with Client",
+    "start": {
+    "dateTime": "2024-03-03T09:00:00",
+    "timeZone": "Australia/Sydney"
+    },
+    "end": {
+    "dateTime": "2024-03-03T10:00:00",
+    "timeZone": "Australia/Sydney"
+    }
+    }]
     '''
   create_event(string)
 

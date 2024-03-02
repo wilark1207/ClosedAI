@@ -2,32 +2,24 @@ from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 import sqlite3
 #import prompt_translation
-import json
-import pyttsx3
-import speech_recognition as sr
 import database
+import json
+import gcal.gcalExtract as gcal
+import prompt_translation as pt
+import create_event as ce
 
-# text to speech
-def textToSpeech(text, gender='Male'):
-    """
-    Convert text to speech
-    :param text: text
-    :param gender: gender
-    :return: None
-    """
-    voice_dict = {'Male': 0, 'Female': 1}
-    code = voice_dict[gender]
-    engine = pyttsx3.init()
-    engine.setProperty('rate', 125)
-    engine.setProperty('volume', 0.8)
-    voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[code].id)
-
-    engine.say(text)
-    engine.runAndWait()
+import pickle
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+import os.path
 
 app = Flask(__name__)
 CORS(app)
+
+DESCRIPTIVE_PROMPT = 1
+MODIFICATION_PROMPT = 2
 
 conn = sqlite3.connect('messages.db')
 cursor = conn.cursor()
@@ -42,11 +34,55 @@ cursor.execute('''
 conn.commit()
 conn.close()
 
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
+
+
+def get_service():
+    creds = None
+
+    # token.pickle stores the user's access and refresh tokens, and is
+    # automatically created when authorization flow completes for the firs time
+    if os.path.exists("token.pickle"):
+        with open("token.pickle", "rb") as token:
+            creds = pickle.load(token)
+
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            creds = flow.run_local_server(port=0)
+
+        with open("token.pickle", "wb") as token:
+            pickle.dump(creds, token)
+
+    service = build("calendar", "v3", credentials=creds)
+    return service
+
 def parse(prompt):
-    database.add_message("AI", prompt + ": This request is currently unavailable.")
+    service = get_service()
+
+    print(pt.is_modif_or_description(prompt))
+
+    if pt.is_modif_or_description(prompt) == DESCRIPTIVE_PROMPT:
+        event_list = gcal.fetch_events(service, pt.get_date_from_prompt(prompt))
+        print(event_list)
+        database.add_message("AI", pt.get_results(prompt, event_list))
+        print(pt.get_results(prompt, event_list))
+        print("********************")
+
+    elif pt.is_modif_or_description(prompt) == MODIFICATION_PROMPT:
+        database.add_message("AI", ce.create_event(service, pt.get_json_from_prompt(prompt)))
+        print(pt.get_json_from_prompt(prompt))
+        print(ce.create_event(service, pt.get_json_from_prompt(prompt)))
+
 
 @app.route('/')
 def home():
+    with open('static/example_events.json') as json_file:
+        data = json.load(json_file)
+    print(data)
+    # Pass the JSON data to the template
     reply = database.get_messages()
     return render_template('index.html', reply=reply)
 
@@ -61,7 +97,6 @@ def send_messages():
 def send_data():
     # Replace this with your actual data or logic to fetch data
     data = {'message': 'Hello from Flask!'}
-    print(data)
     return jsonify(data)
 
 @app.route('/api/get', methods=['POST'])
@@ -75,7 +110,7 @@ def get_data():
         prompt = split_input[1][:-2]
         print(prompt)
         database.add_message("USER", prompt)
-        parse(prompt)
+        print(parse(prompt))
     except:
         #Flashs
         return "Invalid message"
@@ -87,10 +122,11 @@ def get_data():
 
 @app.route('/get_calendar_events', methods=['GET'])
 def calendar_events():
-    print("hello world")
+    #print("hello world")
     with open('static/example_events.json') as json_file:
         data = json.load(json_file)
     return jsonify(data)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
