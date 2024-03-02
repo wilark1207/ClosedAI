@@ -7,6 +7,7 @@ client = OpenAI()
 DESCRIPTIVE_PROMPT = 1
 MODIFICATION_PROMPT = 2
 INVALID_PROMPT = 3
+DELETE_PROMPT = 4
 
 prompt = "Add a lecture today between 3 and 5 pm"
 
@@ -26,20 +27,34 @@ calendar = {
             "summary": "Event 1",
             "location": "Event 1 location",
             "description": "Description of Event 1",
-            "start": {"dateTime": "2024-03-03T10:00:00Z", "timeZone": "UTC"},
-            "end": {"dateTime": "2024-03-03T12:00:00Z", "timeZone": "UTC"},
+            "start": {
+                "dateTime": "2024-03-03T10:00:00Z",
+                "timeZone": "Australia/Sydney",
+            },
+            "end": {"dateTime": "2024-03-03T12:00:00Z", "timeZone": "Australia/Sydney"},
             "reminders": {"useDefault": True},
         },
         {
             "summary": "Event 2",
             "location": "Event 2 location",
             "description": "Description of Event 2",
-            "start": {"dateTime": "2024-03-03T14:00:00Z", "timeZone": "UTC"},
-            "end": {"dateTime": "2024-03-03T16:00:00Z", "timeZone": "UTC"},
+            "start": {
+                "dateTime": "2024-03-03T14:00:00Z",
+                "timeZone": "Australia/Sydney",
+            },
+            "end": {"dateTime": "2024-03-03T16:00:00Z", "timeZone": "Australia/Sydney"},
             "reminders": {"useDefault": True},
         },
     ],
 }
+
+format = [
+    {
+        "summary": "Meeting with Client",
+        "start": {"dateTime": "2024-03-03T09:00:00", "timeZone": "Australia/Sydney"},
+        "end": {"dateTime": "2024-03-03T10:00:00", "timeZone": "Australia/Sydney"},
+    },
+]
 
 
 def is_modif_or_description(prompt):
@@ -49,7 +64,7 @@ def is_modif_or_description(prompt):
             messages=[
                 {
                     "role": "user",
-                    "content": "Is this asking to read the calendar (type1) or is it asking to write on the calendar (type2) or if it is not relevant to calendars or time (type3), answer in this format: This is: Type(1 or 2 or 3 would go here) - "
+                    "content": "Is this asking to read the calendar (type1) or is it asking to write on the calendar (type2) or if it is not relevant to calendars or time (type3),  answer in this format: This is: Type(1 or 2 or 3 would go here - "
                     + prompt,
                 }
             ],
@@ -62,7 +77,6 @@ def is_modif_or_description(prompt):
         return DESCRIPTIVE_PROMPT
     elif re.search(str(MODIFICATION_PROMPT), result) != None:
         return MODIFICATION_PROMPT
-
     return INVALID_PROMPT
 
 
@@ -93,11 +107,11 @@ def get_results(prompt, calendar):
             client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    {
-                        "role": "system",
-                        "content": "The format of the calendar is this json object - "
-                        + json.dumps(calendar),
-                    },
+                    # {
+                    #     "role": "system",
+                    #     "content": "The format of the calendar is this json object - "
+                    #     + json.dumps(calendar),
+                    # },
                     {
                         "role": "user",
                         "content": prompt
@@ -112,6 +126,24 @@ def get_results(prompt, calendar):
     return result
 
 
+def description_reply():
+    result = (
+        client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Your calendar is this json object - "
+                    + json.dumps(calendar),
+                },
+                {"role": "user", "content": prompt},
+            ],
+        )
+        .choices[0]
+        .message.content
+    )
+
+
 def get_date_from_prompt(prompt):
 
     result = (
@@ -121,7 +153,7 @@ def get_date_from_prompt(prompt):
                 {
                     "role": "user",
                     "content": prompt
-                    + "Here I am referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. Return your answer in the format yyyy-mm-dd. Do not say anything else.",
+                    + "Here I am referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. If the date is only one say that date is X, then return the dates X -1 and X + 1 in one line separated by space. Otherwise Return your answer in the format yyyy-mm-dd yyyy-mm-dd. Do not say anything else.",
                 }
             ],
         )
@@ -132,4 +164,25 @@ def get_date_from_prompt(prompt):
     return result
 
 
-print(get_results(prompt, calendar))
+def get_json_from_prompt(prompt):
+
+    result = (
+        client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                    + "If there are multiple events, I want you to return an array of json objects. Otherwise, if it is a single object, just return the single json object. I want the timezone to be "
+                    + "Australia/Sydney"
+                    + ". Here is a format i want a single json to be in: "
+                    + json.dumps(format)
+                    + "In arrays you would have multiple of these.  I want you to return these json objects as text, and not a json file.  Don't say anything else other than the json object in text format, don't have it in code files",
+                }
+            ],
+        )
+        .choices[0]
+        .message.content
+    )
+
+    return result
