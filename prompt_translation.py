@@ -4,7 +4,7 @@ from openai import OpenAI
 from datetime import date
 
 
-client = OpenAI()
+client = OpenAI(organization="org-NC511Thgeguy8HgUyvjjfmQG" ,api_key="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")
 
 DESCRIPTIVE_PROMPT = 1
 MODIFICATION_PROMPT = 2

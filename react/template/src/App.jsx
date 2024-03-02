@@ -57,11 +57,15 @@ const App = () => {
     })
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/get', {msg});
-      // Handle the response if needed
-      fetchMessages();
-      console.log(response.data);
-      setMessage('');
+      await axios.post('http://127.0.0.1:5000/api/get', {msg}).then(
+        res => res.json()
+      ).then(
+        data => {
+          fetchMessages();
+          console.log(data);
+          setMessage('');
+        }
+      );
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -79,6 +83,7 @@ const App = () => {
     try {
       const response = await axios.post('http://127.0.0.1:5000/api/get', {msg});
       // Handle the response if needed
+      const responsejson = await response.json();
       fetchMessages();
       console.log(response.data);
       setMessage('');

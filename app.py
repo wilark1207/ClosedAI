@@ -61,7 +61,7 @@ def get_service():
 
 def parse(prompt):
     service = get_service()
-
+    print(service)
     print(pt.is_modif_or_description(prompt))
 
     if pt.is_modif_or_description(prompt) == DESCRIPTIVE_PROMPT:
@@ -116,7 +116,6 @@ def get_data():
         return "Invalid message"
 
     # Perform any processing or return a response if needed
-    response_data = {'status': message}
     return prompt 
 
 
