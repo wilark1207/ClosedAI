@@ -128,14 +128,16 @@ const App = () => {
       let message= new window.SpeechSynthesisUtterance(text);
       speechSynthesis.speak(message);
   }
+
   return (
-    <>
+    <div>
       <meta charSet="UTF-8" />
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
       <title>Flask Chat App</title>
       {/* Add any additional styles or scripts here */}
+      <body>
         <div className="mainContainer">
           <div className="chatContainer">
             <div className="chatHeader">
@@ -170,20 +172,21 @@ const App = () => {
                 <div ref={messagesEndRef} />
               </div>
               <div className="chatDiv" id="chat-input">
-                <div style={{ position: "relative", width: "100%", display: "flex", height: "100%", alignItems: "center", flexDirection: "row" }}>
-                  <input type="text" id="message-input" value={message} onChange={e => setMessage(e.target.value)} placeholder="Type your message..." />
-                  <button className="micButton" onClick={triggerMic}>
-                    <FontAwesomeIcon icon={faMicrophone} color='black' className='iconMic' />
-                  </button>
-                </div>
+                <input type="text" id="message-input" value={message} onChange={e => setMessage(e.target.value)} placeholder="Type your message..." />
                 <button className="sendButton" onClick={sendMessage}>
                   <FontAwesomeIcon icon={faPaperPlane} />
                 </button> 
               </div>
               <div className="suggestionsDiv">
-                <a className="suggestion">Am I free next Friday?</a>
-                <a className="suggestion">How many hours have I spent studying this week?</a>
-                <a className="suggestion">What do I have on today?</a>
+                <a className="suggestion" onClick={() => {
+                  sendAutoMessage("Am I free next Friday?")
+                }} onChange={e => setMessage(e.target.value)}>Am I free next Friday?</a>
+                <a className="suggestion" onClick={() => {
+                  sendAutoMessage("How many hours have I spent studying this week?")
+                }}onChange={e => setMessage(e.target.value)}>How many hours have I spent studying this week?</a>
+                <a className="suggestion" onClick={() => {
+                sendAutoMessage("What do I have on today?") 
+                }}onChange={e => setMessage(e.target.value)}>What do I have on today?</a>
               </div>
             </div>
           </div>
@@ -191,13 +194,14 @@ const App = () => {
             <div className="displayHeader">
               <h2 className="displayHeaderTitle">March, 2024</h2>
               <h3 className="description">Synced to Google Calendar</h3>
-              <MyCalendar />
             </div>
           </div>
         </div>
 
         {/* Add any additional scripts here */}
-    </>
+      </body>
+      <h4>Developed by ClosedAI for UNIHACK 2024. Powered by AI</h4>
+    </div>
   );
 };
 

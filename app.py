@@ -2,29 +2,7 @@ from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
 import sqlite3
 #import prompt_translation
-import json
-import pyttsx3
-import speech_recognition as sr
 import database
-
-# text to speech
-def textToSpeech(text, gender='Male'):
-    """
-    Convert text to speech
-    :param text: text
-    :param gender: gender
-    :return: None
-    """
-    voice_dict = {'Male': 0, 'Female': 1}
-    code = voice_dict[gender]
-    engine = pyttsx3.init()
-    engine.setProperty('rate', 125)
-    engine.setProperty('volume', 0.8)
-    voices = engine.getProperty('voices')
-    engine.setProperty('voice', voices[code].id)
-
-    engine.say(text)
-    engine.runAndWait()
 
 app = Flask(__name__)
 CORS(app)
@@ -43,6 +21,7 @@ conn.commit()
 conn.close()
 
 def parse(prompt):
+    
     database.add_message("AI", prompt + ": This request is currently unavailable.")
 
 @app.route('/')
