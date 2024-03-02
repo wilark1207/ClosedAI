@@ -60,8 +60,9 @@ def get_service():
     return service
 
 def parse(prompt):
-    service = get_service()
 
+    service = get_service()
+    print(service)
     print(pt.is_modif_or_description(prompt))
 
     if pt.is_modif_or_description(prompt) == DESCRIPTIVE_PROMPT:
@@ -110,7 +111,7 @@ def get_data():
         prompt = split_input[1][:-2]
         print(prompt)
         database.add_message("USER", prompt)
-        print(parse(prompt))
+        parse(prompt)
     except:
         #Flashs
         return "Invalid message"
