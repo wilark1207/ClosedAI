@@ -18,12 +18,22 @@
         </div>
     <div id="main-chat-screen">
         <!-- Your chat UI goes here -->
+        <!-- Add this inside your body tag, adjust styling as needed -->
+        <div id="recordingBg">
+            <div id="recordingIndicator" style="display: none;">
+                <p>Recording...</p>
+            </div>
+        </div>
+
         <div id="chat-messages">
             <!-- Display chat messages here -->
             
         </div>
         <div class="chatDiv" id="chat-input">
             <input type="text" id="message-input" placeholder="Type your message...">
+            <button class="micButton" onclick="triggerMic()">
+                <i class="fa fa-microphone"></i>
+            </button>
         <button class="sendButton" onclick="sendMessage()">
             <i class="fas fa-paper-plane"></i>
         </button>
@@ -50,6 +60,41 @@
             // Implement logic to send the message to the server
             // and update the chat messages on the client side
         }
+
+        function triggerMic() {
+            console.log("clicked microphone");
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            if (SpeechRecognition) {
+                let recognition = new SpeechRecognition();
+                
+                recognition.onstart = function() {
+                    document.getElementById('recordingIndicator').style.display = 'block';
+                };
+                
+                recognition.onspeechend = function() {
+                    document.getElementById('recordingIndicator').style.display = 'none';
+                    console.log("Voice recognition ended.");
+                    recognition.stop();
+                };
+                
+                recognition.onresult = function(event) {
+                    console.log(event.results[0][0].transcript);
+                    let transcript = event.results[0][0].transcript;
+                    document.getElementById('message-input').value = transcript;
+                    console.log("Transcription: " + transcript);
+                };
+                
+                recognition.onerror = function(event) {
+                    console.error("Speech recognition error", event.error);
+                };
+                
+                recognition.start();
+            } else {
+                console.log("Browser does not support Speech Recognition");
+            }
+        }
+
     </script>
 </body>
 </html>
