@@ -27,7 +27,6 @@ const WeekLoadBar = ({ dailyHours }) => {
                     height: '50%',
                     backgroundColor: '#fff', // Light grey background for the unfilled part
                     borderRadius: '10px',
-                    border: '2px solid #ccc',
                     position: 'relative', // Position relative to allow absolute positioning inside
                     }} title={`${hours.toFixed(2)} hours`}>
                     <div style={{
