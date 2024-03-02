@@ -1,15 +1,16 @@
 import re
 import json
 from openai import OpenAI
+from datetime import date
+
 
 client = OpenAI()
 
 DESCRIPTIVE_PROMPT = 1
 MODIFICATION_PROMPT = 2
 INVALID_PROMPT = 3
-DELETE_PROMPT = 4
 
-prompt = "Add a lecture today between 3 and 5 pm"
+prompt = "Am I busy tomorrow 2pm?"
 
 calendar = {
     "summary": "My Calendar",
@@ -63,10 +64,13 @@ def is_modif_or_description(prompt):
             model="gpt-3.5-turbo",
             messages=[
                 {
+                    "role": "system",
+                    "content": "When you get the input from the user. Is the user asking to read the calendar (type1) or is it asking to write on the calendar (type2) or if it is not relevant to calendars or time (type3),  answer in this format: This is: Type(1 or 2 or 3 would go here) Don't say anything else.",
+                },
+                {
                     "role": "user",
-                    "content": "Is this asking to read the calendar (type1) or is it asking to write on the calendar (type2) or if it is not relevant to calendars or time (type3),  answer in this format: This is: Type(1 or 2 or 3 would go here - "
-                    + prompt,
-                }
+                    "content": +prompt,
+                },
             ],
         )
         .choices[0]
@@ -93,8 +97,9 @@ def get_results(prompt, calendar):
                 messages=[
                     {
                         "role": "system",
-                        "content": "Your calendar is this json object - "
-                        + json.dumps(calendar),
+                        "content": "This is the calendar data,"
+                        + json.dumps(calendar)
+                        + "You are to provide an answer to the user prompt according to this data",
                     },
                     {"role": "user", "content": prompt},
                 ],
@@ -151,10 +156,12 @@ def get_date_from_prompt(prompt):
             model="gpt-3.5-turbo",
             messages=[
                 {
-                    "role": "user",
-                    "content": prompt
-                    + "Here I am referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. If the date is only one say that date is X, then return the dates X -1 and X + 1 in one line separated by space. Otherwise Return your answer in the format yyyy-mm-dd yyyy-mm-dd. Do not say anything else.",
-                }
+                    "role": "system",
+                    "content": "here the user will be referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. If the date is only one say that date is X, then return the dates X -1 and X + 1 in one line separated by space. Otherwise Return your answer in the format yyyy-mm-dd yyyy-mm-dd. Do not say anything else."
+                    + "today's date is"
+                    + date.today(),
+                },
+                {"role": "user", "content": prompt},
             ],
         )
         .choices[0]
@@ -171,14 +178,14 @@ def get_json_from_prompt(prompt):
             model="gpt-3.5-turbo",
             messages=[
                 {
-                    "role": "user",
-                    "content": prompt
-                    + "If there are multiple events, I want you to return an array of json objects. Otherwise, if it is a single object, just return the single json object. I want the timezone to be "
+                    "role": "system",
+                    "content": "If there are multiple events, I want you to return an array of json objects. Otherwise, if it is a single object, just return the single json object. I want the timezone to be "
                     + "Australia/Sydney"
                     + ". Here is a format i want a single json to be in: "
                     + json.dumps(format)
                     + "In arrays you would have multiple of these.  I want you to return these json objects as text, and not a json file.  Don't say anything else other than the json object in text format, don't have it in code files",
-                }
+                },
+                {"role": "user", "content": prompt},
             ],
         )
         .choices[0]

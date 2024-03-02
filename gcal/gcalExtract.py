@@ -8,6 +8,7 @@ import json
 import pytz
 from zoneinfo import ZoneInfo
 
+# from prompt_translation import get_results
 
 import pickle
 from google.auth.transport.requests import Request
