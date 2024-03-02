@@ -138,10 +138,14 @@ body{
   height: 70%;
   color: #2E86C1;
   padding-left: 10px;
+  padding-right: 10px;
   border: 2px solid #8ec5fc;
   border-radius: 25px;
   font-weight: 100;
   background-color: #d4e1ea;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 #message-input::placeholder {
@@ -171,6 +175,15 @@ body{
   width: 6%;
   border-radius: 25px;
   color: white;
+  transition: transform 0.4s ease;
+}
+
+.sendButton:hover {
+  transform: scale(1.1);
+}
+
+.sendButton:active {
+  transform: scale(0.9);
 }
 
 .suggestionsDiv{
@@ -211,7 +224,6 @@ h4{
   height: calc(100% - 80px);
   border-radius: 25px;
   border: 1px solid #c7e0fa;
-
   background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
   animation: fade-in-bottom 0.9s ease-in-out forwards;
 }
@@ -219,7 +231,7 @@ h4{
 .displayHeader {
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
-  padding: 40px;
+  padding: 25px;
 }
 
 .displayHeaderTitle{
@@ -279,4 +291,45 @@ h5{
 button:focus,
 button:focus-visible {
   outline: none;
+}
+
+/* Container adjustments */
+.inputContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  height: 40px; /* Example height, adjust as needed */
+  align-items: center;
+  padding-right: 40px; /* Make space for the mic button */
+}
+
+/* Microphone button adjustments */
+.micButton {
+  position: absolute;
+  right: 10px; /* Adjust this value as needed to position the button */
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  width: max-content;
+  border-radius: 50%; /* Circular button */
+  border: none;
+  background-color: transparent; /* Example styling */
+  cursor: pointer; /* Cursor pointer on hover */
+  transition: all 0.5s;
+  outline: none !important;
+}
+
+.micButton:hover {
+  scale: 1.1; /* Example scaling on hover */
+}
+
+.micButton:active {
+  scale: 0.9; /* Example scaling on click */
+}
+
+.iconMic {
+  color: #333; /* Example color */
+  background-color: transparent;
 }
