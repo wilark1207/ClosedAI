@@ -88,5 +88,5 @@ def fetch_events(service, dates):
         return events_result
 
 
-service = get_calendar_service()
-print(fetch_events(service, "2023-04-01 2023-06-01"))
+# service = get_calendar_service()
+# print(fetch_events(service, "2023-04-01 2023-06-01"))
