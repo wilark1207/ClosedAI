@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import './CalendarStyles.css';
 
 const WeekLoadBar = ({ dailyHours }) => {
@@ -12,9 +13,8 @@ const WeekLoadBar = ({ dailyHours }) => {
             flexWrap: 'wrap', // Wrap items to next line if not enough space
             gap: '10px',
             padding: '20px',
-            backgroundColor: '#f9f9f9',
+            backgroundColor: 'transparent',
             borderRadius: '10px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
             maxWidth: '600px', // Set a max width for the container
             margin: 'auto', // Center the container
             height: '60dvh',
@@ -25,7 +25,7 @@ const WeekLoadBar = ({ dailyHours }) => {
                     <div style={{
                     width: '60%', // Fixed width for the outer bar container
                     height: '50%',
-                    backgroundColor: '#e0e0e0', // Light grey background for the unfilled part
+                    backgroundColor: '#fff', // Light grey background for the unfilled part
                     borderRadius: '10px',
                     border: '2px solid #ccc',
                     position: 'relative', // Position relative to allow absolute positioning inside
@@ -59,6 +59,10 @@ const WeekLoadBar = ({ dailyHours }) => {
           </div>
     );
   };
+  
+WeekLoadBar.propTypes = {
+    dailyHours: PropTypes.object.isRequired,
+};
 
 const MyCalendar = () => {
     const [events, setEvents] = useState({

@@ -16,6 +16,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/get/, ''),
       },
+      '/api/messages': {
+        target: 'http://127.0.0.1:5000/api/messages',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/messages/, ''),
+      },
     },
   },
 })
