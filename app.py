@@ -1,13 +1,39 @@
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS
-
+import sqlite3
+#import prompt_translation
+import database
 
 app = Flask(__name__)
 CORS(app)
 
+conn = sqlite3.connect('messages.db')
+cursor = conn.cursor()
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        author VARCHAR(20) NOT NULL,
+        content TEXT NOT NULL
+    )
+''')
+#cursor.execute('INSERT INTO messages (author, content) VALUES (?, ?)', ('AI', 'How can I assist you today?'))
+conn.commit()
+conn.close()
+
+def parse(prompt):
+    database.add_message("AI", prompt + ": This request is currently unavailable.")
+
 @app.route('/')
 def home():
-    return render_template('index.html')
+    reply = database.get_messages()
+    return render_template('index.html', reply=reply)
+
+@app.route('/api/messages', methods=['GET'])
+def send_messages():
+    # Replace this with your actual data or logic to fetch data
+    data = database.get_messages()
+    print(data)
+    return jsonify(data)
 
 @app.route('/api/data', methods=['GET'])
 def send_data():
@@ -26,13 +52,16 @@ def get_data():
         split_input = message.split(":\"")
         prompt = split_input[1][:-2]
         print(prompt)
+        database.add_message("USER", prompt)
+        parse(prompt)
     except:
-        #Flash
+        #Flashs
         return "Invalid message"
 
     # Perform any processing or return a response if needed
     response_data = {'status': message}
-    return jsonify(response_data)   
+    return prompt 
+
 
 if __name__ == '__main__':
     app.run(debug=True)

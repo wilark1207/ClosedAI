@@ -103,6 +103,8 @@ body{
   overflow-y: auto;
   padding: 10px;
   width: 70%;
+  max-height: 55%;
+  height: 55%;
 }
 
 .loader {
@@ -198,9 +200,10 @@ body{
 
 h4{
   margin-top: 0;
-  color: lightgrey;
+  color: white;
   font-size: small;
-  font-weight:200;
+  text-align: center;
+  font-weight: 400;
 }
 
 .display {
@@ -253,6 +256,17 @@ h4{
   margin-top: 5px;
   padding: 10px;
   border-radius: 25px;
+  animation: fade-in-bottom 1s ease-in-out forwards;
+}
+
+.messageUser{
+  display: flex;
+  font-size: 16px;
+  color: #555;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 25px;
+  animation: fade-in-bottom 0.5s ease-in-out forwards;
 }
 
 h5{
@@ -261,7 +275,7 @@ h5{
 
 .icon {
   color: #d19fff;
-  margin-right: 8px; /* Adjust the spacing between the icon and text as needed */
+  margin: 10px; /* Adjust the spacing between the icon and text as needed */
 }
 
 .content {
