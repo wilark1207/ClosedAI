@@ -44,7 +44,6 @@ const App = () => {
     } catch (error) {
       console.error('Error sending message:', error);
     }
-
   };
 
   return (

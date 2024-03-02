@@ -18,13 +18,22 @@ def send_data():
 
 @app.route('/api/get', methods=['POST'])
 def get_data():
-    data = request.json  # Assuming the data is sent as JSON in the request body
-    message = data.get('message', 'No message received')
+    data = request.json
+    message = data.get('msg')  # Use 'input' instead of 'msg'
     print('Received message:', message)
 
+    try:
+        split_input = message.split(":\"")
+        prompt = split_input[1][:-2]
+        print(prompt)
+    except:
+        #Flash
+        return "Invalid message"
+
     # Perform any processing or return a response if needed
-    response_data = {'status': 'Message received successfully'}
-    return jsonify(response_data)
+    response_data = {'status': message}
+    return jsonify(response_data)   
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
