@@ -22,7 +22,7 @@ def create_event(service, events_string):
     events_list = json.loads(events_string)
 
     for event in events_list:
-        event = service.events().insert(calendarId='jacky248199911@gmail.com', body=event).execute()
+        event = service.events().insert(calendarId='primary', body=event).execute()
 
     return 'The event(s) have been created successfully in your calendar'
 
