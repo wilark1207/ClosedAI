@@ -5,7 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
     <title>Flask Chat App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- Add any additional styles or scripts here -->
@@ -55,6 +58,7 @@
     <div class="displayHeader">
         <h2 class="displayHeaderTitle">March, 2024</h2>
         <h3 class="description">Synced to Google Calendar</h3>
+        <div id='calendar'></div>
     </div>
 </div>
 </div>
@@ -64,6 +68,7 @@
         function sendMessage() {
             // Implement logic to send the message to the server
             // and update the chat messages on the client side
+            console.log(myjson);
         }
 
         function triggerMic() {
@@ -120,6 +125,14 @@
             let message= new window.SpeechSynthesisUtterance(text);
             speechSynthesis.speak(message);
         }
+        myjson = JSON.parse('{{ myjson | tojson | safe }}');
+        console.log(myjson);
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                events: (myjson),
+            });
+        });
     </script>
 </body>
 </html>
+

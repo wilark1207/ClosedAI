@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 import pyttsx3
 import speech_recognition as sr
+import json
 
 # text to speech
 def textToSpeech(text, gender='Male'):
@@ -25,7 +26,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    with open('static/example_events.json') as json_file:
+        data = json.load(json_file)
+    print(data)
+    # Pass the JSON data to the template
+    return render_template('index.html', myjson=data)
 
 """
 Example route to get the text after recording mic successfully
@@ -39,6 +44,7 @@ def receive_text():
     textToSpeech(text, gender)
     return jsonify({"message": "Text received and converted to speech successfully!"})
 """
+
 
 if __name__ == '__main__':
     app.run(debug=True)
