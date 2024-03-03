@@ -2,9 +2,8 @@ import re
 import json
 from openai import OpenAI
 from datetime import date
-
-
-client = OpenAI(api_key="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")
+# client = OpenAI(api_key="APIKEY")
+client = OpenAI()
 
 DESCRIPTIVE_PROMPT = 1
 MODIFICATION_PROMPT = 2
