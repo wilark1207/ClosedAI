@@ -11,6 +11,7 @@ npm run dev
 ```
 ### Run Backend: ###
 ```
+pip install openai
 pip install flask
 python -m flask --debug run
 ```
