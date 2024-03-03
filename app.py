@@ -6,6 +6,8 @@ import database
 import json
 import gcal.gcalExtract as gcal
 import prompt_translation as pt
+from datetime import date
+from datetime import datetime, timedelta
 import create_event as ce
 
 import pickle
@@ -34,8 +36,8 @@ cursor.execute('''
 conn.commit()
 conn.close()
 
-SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
+SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 def get_service():
     creds = None
@@ -60,22 +62,21 @@ def get_service():
     return service
 
 def parse(prompt):
-
+    current_date = datetime.now().strftime('%Y-%m-%d')
     service = get_service()
-    print(service)
-    print(pt.is_modif_or_description(prompt))
 
     if pt.is_modif_or_description(prompt) == DESCRIPTIVE_PROMPT:
+        print("1")
         event_list = gcal.fetch_events(service, pt.get_date_from_prompt(prompt))
         print(event_list)
         database.add_message("AI", pt.get_results(prompt, event_list))
-        print(pt.get_results(prompt, event_list))
-        print("********************")
 
     elif pt.is_modif_or_description(prompt) == MODIFICATION_PROMPT:
+        print("2")
         database.add_message("AI", ce.create_event(service, pt.get_json_from_prompt(prompt)))
-        print(pt.get_json_from_prompt(prompt))
-        print(ce.create_event(service, pt.get_json_from_prompt(prompt)))
+    else:
+        print("3")
+        return "DIDNT WORK"
 
 
 @app.route('/')
@@ -111,6 +112,7 @@ def get_data():
         prompt = split_input[1][:-2]
         print(prompt)
         database.add_message("USER", prompt)
+        print("????")
         parse(prompt)
     except:
         #Flashs
@@ -119,7 +121,6 @@ def get_data():
     # Perform any processing or return a response if needed
     response_data = {'status': message}
     return prompt 
-
 
 @app.route('/get_calendar_events', methods=['GET'])
 def calendar_events():

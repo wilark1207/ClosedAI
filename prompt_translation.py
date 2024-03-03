@@ -1,7 +1,8 @@
 import re
 import json
 from openai import OpenAI
-from datetime import date
+from datetime import date as d
+from datetime import datetime, timedelta
 
 
 client = OpenAI()
@@ -58,6 +59,23 @@ format = [
 ]
 
 
+def get_three_months_range(current_date):
+    # Parse the input date string to a datetime object
+    current_date = datetime.strptime(current_date, '%Y-%m-%d')
+
+    # Calculate the date 6 months before the current date
+    six_months_before = current_date - timedelta(days=3*30)
+
+    # Calculate the date 6 months after the current date
+    six_months_after = current_date + timedelta(days=3*30)
+
+    # Return the results as a tuple
+    return six_months_before.strftime('%Y-%m-%d'), six_months_after.strftime('%Y-%m-%d')
+
+# Example usage:
+current_date = datetime.now().strftime('%Y-%m-%d')
+date = get_three_months_range(current_date)
+
 def is_modif_or_description(prompt):
     result = (
         client.chat.completions.create(
@@ -69,7 +87,7 @@ def is_modif_or_description(prompt):
                 },
                 {
                     "role": "user",
-                    "content": +prompt,
+                    "content": prompt,
                 },
             ],
         )
@@ -82,6 +100,7 @@ def is_modif_or_description(prompt):
     elif re.search(str(MODIFICATION_PROMPT), result) != None:
         return MODIFICATION_PROMPT
     return INVALID_PROMPT
+
 
 
 def get_results(prompt, calendar):
@@ -148,8 +167,11 @@ def description_reply():
         .message.content
     )
 
+#here the user will be referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. If the date is only one say that date is X, then return the dates X -1 and X + 1 in one line separated by space. Otherwise Return your answer in the format yyyy-mm-dd yyyy-mm-dd. Do not say anything else.
 
 def get_date_from_prompt(prompt):
+
+    todays_date = d.today()
 
     result = (
         client.chat.completions.create(
@@ -157,11 +179,16 @@ def get_date_from_prompt(prompt):
             messages=[
                 {
                     "role": "system",
-                    "content": "here the user will be referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. If the date is only one say that date is X, then return the dates X -1 and X + 1 in one line separated by space. Otherwise Return your answer in the format yyyy-mm-dd yyyy-mm-dd. Do not say anything else."
-                    + "today's date is"
-                    + date.today(),
+                    "content": "You are an assistant that helps summarise conversations from text based on the transcription of these texts and collected specified range of dates. Don't say anything but the dates in the response. Today's date is "
+                    + str(todays_date) + "Example: [The current date in this example is 2024-03-02, and the day of the week is Sunday], Customer: Good morning, I want to know what my schedule looks like for the coming tuesday"
+                    + " Agent: 2024-03-04 2024-03-06"
+                    + " It is MANDATORY that the following structure of dates are TWO dates in the format: 'yyyy-mm-dd yyyy-mm-dd'"
+                    + "If the prompt refers to only one date, then given X is that date, only return the dates X - 1 and X + 1 in the format that I specified."
+                    + "If the user mentions a day of the week equal to monday, consider money of the following week. IF THE USER MENTIONS THE DAY OF THE WEEK, FIRST"
+                    + "CALCULATE THE DATE FOR THAT DAY BASED ON THE CURRENT DATE" + str(todays_date) + ". All mentioned dates are independent, so for each, always compare with the current date.",
                 },
-                {"role": "user", "content": prompt},
+
+                {"role": "user", "content": prompt + "Todays date is " + str(todays_date)},
             ],
         )
         .choices[0]
@@ -169,7 +196,6 @@ def get_date_from_prompt(prompt):
     )
 
     return result
-
 
 def get_json_from_prompt(prompt):
 

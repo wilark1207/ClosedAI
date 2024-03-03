@@ -48,6 +48,8 @@ const App = () => {
     }
   }
 
+  setTimeout(fetchMessages, 2000);
+
   const sendMessage = async () => {
     // Implement logic to send the message to the server
     // and update the chat messages on the client side
@@ -176,7 +178,7 @@ const App = () => {
                     <FontAwesomeIcon icon={faWandMagicSparkles} />
                   </span>
                   <div className="content">
-                    <h5>ClosedAI</h5>
+                    <h5>AI</h5>
                     <p className="message">How can I assist you today?</p>
                   </div>
                 </div>
