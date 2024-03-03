@@ -4,7 +4,7 @@ from openai import OpenAI
 from datetime import date
 
 
-client = OpenAI(organization="org-NC511Thgeguy8HgUyvjjfmQG" ,api_key="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")
+client = OpenAI(api_key="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")
 
 DESCRIPTIVE_PROMPT = 1
 MODIFICATION_PROMPT = 2
@@ -69,7 +69,7 @@ def is_modif_or_description(prompt):
                 },
                 {
                     "role": "user",
-                    "content": +prompt,
+                    "content": prompt,
                 },
             ],
         )
@@ -77,9 +77,9 @@ def is_modif_or_description(prompt):
         .message.content
     )
 
-    if re.search(str(DESCRIPTIVE_PROMPT), result) != None:
+    if re.search(str(DESCRIPTIVE_PROMPT), result) is not None:
         return DESCRIPTIVE_PROMPT
-    elif re.search(str(MODIFICATION_PROMPT), result) != None:
+    elif re.search(str(MODIFICATION_PROMPT), result) is not None:
         return MODIFICATION_PROMPT
     return INVALID_PROMPT
 
@@ -90,18 +90,18 @@ def get_results(prompt, calendar):
     result = None
 
     if type == DESCRIPTIVE_PROMPT:
-        # he said put it in here
         result = (
             client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                     {
                         "role": "system",
-                        "content": "This is the calendar data,"
-                        + json.dumps(calendar)
-                        + "You are to provide an answer to the user prompt according to this data",
+                        "content": f"This is the calendar data, {json.dumps(calendar)} You are to provide an answer to the user prompt according to this data",
                     },
-                    {"role": "user", "content": prompt},
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    },
                 ],
             )
             .choices[0]
@@ -112,15 +112,9 @@ def get_results(prompt, calendar):
             client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
-                    # {
-                    #     "role": "system",
-                    #     "content": "The format of the calendar is this json object - "
-                    #     + json.dumps(calendar),
-                    # },
                     {
                         "role": "user",
-                        "content": prompt
-                        + "\nGive the modifications only as a google calendar api json object",
+                        "content": f"{prompt}\nGive the modifications only as a google calendar api json object",
                     },
                 ],
             )
@@ -131,26 +125,7 @@ def get_results(prompt, calendar):
     return result
 
 
-def description_reply():
-    result = (
-        client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Your calendar is this json object - "
-                    + json.dumps(calendar),
-                },
-                {"role": "user", "content": prompt},
-            ],
-        )
-        .choices[0]
-        .message.content
-    )
-
-
 def get_date_from_prompt(prompt):
-
     result = (
         client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -158,10 +133,12 @@ def get_date_from_prompt(prompt):
                 {
                     "role": "system",
                     "content": "here the user will be referring to the range of dates based on today, I don't want an answer I only want the dates specified within that period. If the date is only one say that date is X, then return the dates X -1 and X + 1 in one line separated by space. Otherwise Return your answer in the format yyyy-mm-dd yyyy-mm-dd. Do not say anything else."
-                    + "today's date is"
-                    + date.today(),
+                    + f"today's date is {date.today()}",
                 },
-                {"role": "user", "content": prompt},
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
             ],
         )
         .choices[0]
@@ -172,20 +149,20 @@ def get_date_from_prompt(prompt):
 
 
 def get_json_from_prompt(prompt):
-
     result = (
         client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {
                     "role": "system",
-                    "content": "If there are multiple events, I want you to return an array of json objects. Otherwise, if it is a single object, just return the single json object. I want the timezone to be "
-                    + "Australia/Sydney"
-                    + ". Here is a format i want a single json to be in: "
+                    "content": "If there are multiple events, I want you to return an array of json objects. Otherwise, if it is a single object, just return the single json object. I want the timezone to be Australia/Sydney. Here is a format i want a single json to be in: "
                     + json.dumps(format)
                     + "In arrays you would have multiple of these.  I want you to return these json objects as text, and not a json file.  Don't say anything else other than the json object in text format, don't have it in code files",
                 },
-                {"role": "user", "content": prompt},
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
             ],
         )
         .choices[0]

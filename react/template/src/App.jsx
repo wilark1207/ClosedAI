@@ -57,15 +57,11 @@ const App = () => {
     })
 
     try {
-      await axios.post('http://127.0.0.1:5000/api/get', {msg}).then(
-        res => res.json()
-      ).then(
-        data => {
-          fetchMessages();
-          console.log(data);
-          setMessage('');
-        }
-      );
+      const response = await axios.post('http://127.0.0.1:5000/api/get', {msg});
+      // Handle the response if needed
+      fetchMessages();
+      console.log(response.data);
+      setMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -83,7 +79,6 @@ const App = () => {
     try {
       const response = await axios.post('http://127.0.0.1:5000/api/get', {msg});
       // Handle the response if needed
-      const responsejson = await response.json();
       fetchMessages();
       console.log(response.data);
       setMessage('');
@@ -164,7 +159,6 @@ const App = () => {
 
       <title>Flask Chat App</title>
       {/* Add any additional styles or scripts here */}
-      <body>
         <div className="mainContainer">
           <div className="chatContainer">
             <div className="chatHeader">
@@ -232,7 +226,6 @@ const App = () => {
         </div>
 
         {/* Add any additional scripts here */}
-      </body>
       <h4>Developed by ClosedAI for UNIHACK 2024. Powered by AI</h4>
     </div>
   );

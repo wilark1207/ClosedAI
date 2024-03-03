@@ -99,24 +99,25 @@ def send_data():
     data = {'message': 'Hello from Flask!'}
     return jsonify(data)
 
+from flask import Flask, request, jsonify
+
 @app.route('/api/get', methods=['POST'])
 def get_data():
     data = request.json
-    message = data.get('msg')  # Use 'input' instead of 'msg'
+    message = data.get('msg')
+    if not message:
+        return jsonify({"error": "Message is required"}), 400
+
     print('Received message:', message)
 
+    # Assuming database.add_message() and parse() are valid operations:
     try:
-        split_input = message.split(":\"")
-        prompt = split_input[1][:-2]
-        print(prompt)
-        database.add_message("USER", prompt)
-        print(parse(prompt))
-    except:
-        #Flashs
-        return "Invalid message"
-
-    # Perform any processing or return a response if needed
-    return prompt 
+        database.add_message("USER", message)
+        response = parse(message)  # Assuming parse() returns something you want to send back
+        return jsonify({"response": response}), 200
+    except Exception as e:
+        print(f"Error processing message: {e}")
+        return jsonify({"error": "Failed to process message"}), 500
 
 
 @app.route('/get_calendar_events', methods=['GET'])
