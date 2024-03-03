@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-import { faPaperPlane, faWandMagicSparkles, faUser, faMicrophone } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faWandMagicSparkles, faUser, faMicrophone, faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 import MyCalendar from './Calendar';
 
 const App = () => {
@@ -23,25 +23,12 @@ const App = () => {
     fetchMessages();
   }, []);
 
-  useEffect(() => {
-    console.log(msgArr);
-  }, [msgArr])
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('/api/data');
-      const jsonData = await response.json();
-      setData(jsonData);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   const fetchMessages = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/api/messages');
       const responsejson = await response.json();
-      //console.log(responsejson)
+      // console.log(responsejson)
+      // forEach message content then input
       setMsgArr(responsejson);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -51,16 +38,13 @@ const App = () => {
   const sendMessage = async () => {
     // Implement logic to send the message to the server
     // and update the chat messages on the client side
-
     const msg = JSON.stringify({
       input: message
     })
 
     try {
       const response = await axios.post('http://127.0.0.1:5000/api/get', {msg});
-      // Handle the response if needed
-      fetchMessages();
-      console.log(response.data);
+      await fetchMessages();
       setMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
@@ -93,7 +77,7 @@ const App = () => {
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
   useEffect(() => {
-    scrollToBottom()
+    scrollToBottom();
   }, [msgArr]);
 
   const triggerMic = async () => {
@@ -116,24 +100,8 @@ const App = () => {
         recognition.onresult = function(event) {
             console.log(event.results[0][0].transcript);
             let transcript = event.results[0][0].transcript;
-            document.getElementById('message-input').value = transcript;
+            setMessage(transcript);
             console.log("Transcription: " + transcript);
-            /* Example post request with the text
-            fetch('/receive_text', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text: transcript }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            */
         };
         
         recognition.onerror = function(event) {
@@ -179,7 +147,7 @@ const App = () => {
                     <p className="message">How can I assist you today?</p>
                   </div>
                 </div>
-                {msgArr.map((msg, index) => ( 
+                {msgArr.map((msg, index) => (
               <div key={index} className={msg.author === 'USER' ? 'messageUser' : 'messageAI'}>
               <span className="icon">
                 <FontAwesomeIcon icon={msg.author === 'USER' ? faUser : faWandMagicSparkles} />
@@ -188,6 +156,11 @@ const App = () => {
                 <h5>{msg.author}</h5>
                 <p className="message">{msg.content}</p>
               </div>
+              <button style={{ 
+                background: 'transparent'
+              }} className="speakerButton" onClick={() => textToSpeech(msg.content)}>
+                <FontAwesomeIcon icon={faCirclePlay} color='black' className='iconMic' />
+              </button>
             </div>
             ))}
                 <div ref={messagesEndRef} />

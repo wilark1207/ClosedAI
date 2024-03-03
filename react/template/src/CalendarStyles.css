@@ -28,3 +28,17 @@
     margin: 2px 0;
     border-radius: 5px;
   }
+
+  @keyframes moveBackground {
+    from {
+      background-position: 0% 0;
+    }
+    to {
+      background-position: 100% 0;
+    }
+  }
+  
+  .barAnimation {
+    animation: moveBackground 1s linear infinite; /* Adjust the duration (10s) as needed */
+  }
+  
