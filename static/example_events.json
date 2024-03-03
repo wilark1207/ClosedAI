@@ -40,6 +40,26 @@
         ],
         "created": "2024-02-22T08:30:00.000Z",
         "updated": "2024-02-26T09:45:00.000Z"
+      },
+      {
+        "id": "xyz",
+        "summary": "Client Presentation",
+        "description": "Presenting the new product features to the client.",
+        "location": "Client's Office",
+        "start": {
+          "dateTime": "2024-03-05T14:00:00-07:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "end": {
+          "dateTime": "2024-03-05T15:30:00-07:00",
+          "timeZone": "America/Los_Angeles"
+        },
+        "attendees": [
+          {"email": "client@example.com", "responseStatus": "accepted"},
+          {"email": "sales@example.com", "responseStatus": "accepted"}
+        ],
+        "created": "2024-02-22T08:30:00.000Z",
+        "updated": "2024-02-26T09:45:00.000Z"
       }
     ]
   }
