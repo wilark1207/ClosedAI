@@ -61,20 +61,15 @@ def get_service():
 
 def parse(prompt):
     service = get_service()
-    print(service)
-    print(pt.is_modif_or_description(prompt))
 
     if pt.is_modif_or_description(prompt) == DESCRIPTIVE_PROMPT:
         event_list = gcal.fetch_events(service, pt.get_date_from_prompt(prompt))
-        print(event_list)
         database.add_message("AI", pt.get_results(prompt, event_list))
-        print(pt.get_results(prompt, event_list))
-        print("********************")
-
+        return pt.get_results(prompt, event_list)
     elif pt.is_modif_or_description(prompt) == MODIFICATION_PROMPT:
         database.add_message("AI", ce.create_event(service, pt.get_json_from_prompt(prompt)))
         print(pt.get_json_from_prompt(prompt))
-        print(ce.create_event(service, pt.get_json_from_prompt(prompt)))
+        return ce.create_event(service, pt.get_json_from_prompt(prompt))
 
 
 @app.route('/')
@@ -90,7 +85,7 @@ def home():
 def send_messages():
     # Replace this with your actual data or logic to fetch data
     data = database.get_messages()
-    print(data)
+    
     return jsonify(data)
 
 @app.route('/api/data', methods=['GET'])
@@ -99,12 +94,11 @@ def send_data():
     data = {'message': 'Hello from Flask!'}
     return jsonify(data)
 
-from flask import Flask, request, jsonify
-
 @app.route('/api/get', methods=['POST'])
 def get_data():
     data = request.json
     message = data.get('msg')
+    # Pattern to extract text within {"input":"HERE"}
     if not message:
         return jsonify({"error": "Message is required"}), 400
 
@@ -112,12 +106,13 @@ def get_data():
 
     # Assuming database.add_message() and parse() are valid operations:
     try:
-        database.add_message("USER", message)
+        split_input = message.split(":\"")
+        prompt = split_input[1][:-2]
+        database.add_message("USER", prompt)
         response = parse(message)  # Assuming parse() returns something you want to send back
         return jsonify({"response": response}), 200
-    except Exception as e:
-        print(f"Error processing message: {e}")
-        return jsonify({"error": "Failed to process message"}), 500
+    except Exception as e:  # Catch any exception and return an error
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route('/get_calendar_events', methods=['GET'])
